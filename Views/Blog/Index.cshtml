@@ -1,0 +1,195 @@
+﻿@model List<myBlog.Models.Blogs>
+
+@{
+    ViewBag.Title = "Blog Yazıları";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="blog-section">
+    <div class="container">
+
+        <div class="section-header">
+            <h2 class="section-title">Blog & Makaleler</h2>
+            <p class="section-subtitle">Teknoloji, yazılım ve deneyimlerime dair notlar.</p>
+
+            @if (Session["admin"] != null)
+            {
+                <a href="@Url.Action("Create", "Blog")" class="btn-add-new">
+                    + Yeni Yazı Yaz
+                </a>
+            }
+        </div>
+
+        <div class="blog-grid">
+            @foreach (var item in Model)
+            {
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/600x400" : item.ImageUrl)" alt="@item.Title" />
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-date">📅 @(item.CreatedDate.HasValue ? item.CreatedDate.Value.ToString("dd MMM yyyy") : "")</span>
+                        <h3 class="blog-title">@item.Title</h3>
+
+                        <p class="blog-summary">
+                            @if (!string.IsNullOrEmpty(item.Content) && item.Content.Length > 100)
+                            {
+                                @item.Content.Substring(0, 100) <text>...</text>
+                            }
+                            else
+                            {
+                                @item.Content
+                            }
+                        </p>
+
+                        <div class="blog-actions">
+                            <a href="@Url.Action("Details", "Blog", new { id = item.Id })" class="read-more">Devamını Oku →</a>
+
+                            @if (Session["admin"] != null)
+                            {
+                                <a href="@Url.Action("Delete", "Blog", new { id = item.Id })"
+                                   class="delete-link"
+                                   onclick="return confirm('Silmek istediğine emin misin?')">Sil</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (Model.Count == 0)
+        {
+            <div class="empty-state">
+                <p>Henüz blog yazısı eklenmemiş.</p>
+            </div>
+        }
+
+    </div>
+</section>
+
+<style>
+    .blog-section {
+        padding: 4rem 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-subtitle {
+        color: #64748b;
+        margin-top: 10px;
+    }
+
+    .btn-add-new {
+        display: inline-block;
+        margin-top: 15px;
+        background: #2563eb;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2.5rem;
+    }
+
+    .blog-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .blog-image {
+        height: 200px;
+        overflow: hidden;
+    }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .blog-content {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .blog-date {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .blog-title {
+        font-size: 1.4rem;
+        color: #1e293b;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .blog-summary {
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+    }
+
+    .blog-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 1rem;
+    }
+
+    .read-more {
+        color: #2563eb;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+    .delete-link {
+        color: #ef4444;
+        font-size: 0.9rem;
+        text-decoration: none;
+    }
+
+        .delete-link:hover {
+            text-decoration: underline;
+        }
+
+    .empty-state {
+        text-align: center;
+        color: #94a3b8;
+        margin-top: 2rem;
+    }
+</style>

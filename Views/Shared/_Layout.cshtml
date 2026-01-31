@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Yiğit Kaan</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(to right, var(--primary), white);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo:hover { transform: scale(1.02); color: #fff; }
+
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .nav-links .btn-login {
+            color: #10b981;
+            border: 1px solid #10b981;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        .nav-links .btn-login:hover { background: #10b981; color: white; }
+
+        .nav-links .btn-logout { color: var(--danger); font-size: 0.9rem; }
+
+        /* --- İÇERİK ALANI --- */
+        .container.body-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+        .footer-text { font-size: 0.9rem; opacity: 0.9; }
+
+        /* --- MOBİL --- */
+        @@media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 1rem; }
+            .nav-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        }
+
+        /* --- GENEL --- */
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        .section-title::after {
+            content: ''; position: absolute; width: 60px; height: 4px;
+            background: var(--primary); bottom: -10px; left: 50%;
+            transform: translateX(-50%); border-radius: 2px;
+        }
+
+        /* --- PROJE KARTLARI (Eksik Olan Kısım Burasıydı) --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-image {
+            height: 220px; /* İŞTE BU SATIR RESİMLERİ DÜZELTİYOR */
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-tech {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tech-tag {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .project-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover { color: var(--secondary); }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="navbar">
+            <a href="@Url.Action("Index", "Home")" class="logo">Yiğit Kaan</a>
+            <div class="nav-links">
+                <a href="@Url.Action("Index", "Home")">Home</a>
+                <a href="@Url.Action("Projects", "Home")">Projects</a>
+                <a href="@Url.Action("Index", "Blog")">Blog</a>
+                <a href="@Url.Action("Contact", "Home")">Contact</a>
+
+                @if (Session["admin"] != null)
+                {
+                    <a href="@Url.Action("Create", "Project")" style="color:var(--primary)">+ Proje Ekle</a>
+                    <a href="@Url.Action("EditAbout", "Home")">Hakkımda'yı Düzenle</a>
+                    <a href="@Url.Action("Logout", "Account")" class="btn-logout">Çıkış</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Login", "Account")" class="btn-login">Giriş Yap</a>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <footer>
+        <p class="footer-text">© @DateTime.Now.Year Yiğit Kaan Özkan - Kişisel Blog & Portfolyo</p>
+    </footer>
+
+</body>
+</html>

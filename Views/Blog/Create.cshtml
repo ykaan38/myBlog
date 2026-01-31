@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Yeni Yazı Yaz";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="max-width: 700px; margin-top: 50px; margin-bottom: 50px;">
+
+    <h2 class="text-center mb-4" style="color: #1e293b;">Yeni Blog Yazısı</h2>
+
+    <form method="post" enctype="multipart/form-data" class="blog-form">
+
+        <div class="form-group">
+            <label>Başlık</label>
+            <input type="text" name="Title" class="form-control" required placeholder="Yazının başlığı..." />
+        </div>
+
+        <div class="form-group">
+            <label>Kapak Resmi</label>
+            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+        </div>
+
+        <div class="form-group">
+            <label>İçerik</label>
+            <textarea name="Content" class="form-control" rows="12" required placeholder="Düşüncelerini buraya yaz..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Yayınla</button>
+
+        @if (ViewBag.Error != null)
+        {
+            <div style="color: red; margin-top: 10px;">@ViewBag.Error</div>
+        }
+    </form>
+</div>
+
+<style>
+    .blog-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #475569;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-family: inherit;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background-color: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+        .btn-submit:hover {
+            background-color: #1d4ed8;
+        }
+</style>

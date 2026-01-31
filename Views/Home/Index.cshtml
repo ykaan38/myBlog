@@ -1,0 +1,426 @@
+﻿@model List<myBlog.Models.Projects>
+@{
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Blog</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <section class="hero">
+        <div class="hero-content">
+            @{
+                var about = ViewBag.About as myBlog.Models.About;
+            }
+
+            <h1 class="hero-title">
+                Hello, I'm
+                <span>
+                    @(about != null ? about.FullName : "Yiğit Kaan")
+                </span>
+            </h1>
+
+            <p class="hero-text">
+                @(about != null ? about.ShortDescription : "Welcome to my personal blog where I share my thoughts, experiences, and projects.")
+            </p>
+
+            <a href="@Url.Action("About", "Home")">
+                <button class="hero-btn">About Me</button>
+            </a>
+        </div>
+
+        <div class="hero-image">
+            <img src="@(about != null && !string.IsNullOrEmpty(about.ProfileImageUrl) ? about.ProfileImageUrl : Url.Content("~/Content/images/ben.png"))"
+                 alt="Profile Photo" />
+        </div>
+    </section>
+
+    <section class="projects" id="projects">
+        <h2 class="section-title">My Projects</h2>
+
+        <div class="projects-grid">
+            @foreach (var item in Model)
+            {
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/300" : item.ImageUrl)" alt="@item.Title" />
+                    </div>
+
+                    <div class="project-content">
+                        <h3 class="project-title">@item.Title</h3>
+
+                        <div class="project-tech">
+                            @if (!string.IsNullOrEmpty(item.Tags))
+                            {
+                                foreach (var tag in item.Tags.Split(','))
+                                {
+                                    <span class="tech-tag">@tag.Trim()</span>
+                                }
+                            }
+                        </div>
+
+                        <p class="project-desc">@item.Description</p>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <a href="@Url.Action("ProjectDetails", "Home", new { id = item.Id })" class="project-link">
+                                View Project
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
+
+                            @if (Session["admin"] != null)
+                            {
+                                <a href="@Url.Action("Delete", "Project", new { id = item.Id })"
+                                   class="btn-delete"
+                                   onclick="return confirm('Bu projeyi silmek istediğinize emin misiniz?');">
+                                    🗑️ Sil
+                                </a>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+            @if (Model.Count == 0)
+            {
+                <div style="grid-column: 1 / -1; text-align: center; color: #64748b;">
+                    <p>Henüz eklenmiş bir proje bulunmuyor.</p>
+                </div>
+            }
+
+        </div>
+    </section>
+
+</body>
+</html>
+
+<style>
+    :root {
+        --primary: #2563eb;
+        --secondary: #1e40af;
+        --dark: #1e293b;
+        --light: #f8fafc;
+        --accent: #f59e0b;
+        --danger: #ef4444; /* Silme butonu için kırmızı renk */
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--light);
+        color: var(--dark);
+        line-height: 1.6;
+    }
+
+    nav {
+        background-color: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: linear-gradient(to right, var(--primary),white);
+    }
+
+    .navbar {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        color: var(--primary);
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        background: var(--primary);
+        bottom: -4px;
+        left: 0;
+        transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .hero {
+        max-width: 1200px;
+        margin: 4rem auto;
+        padding: 0 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+    }
+
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .hero-title span {
+        color: var(--primary);
+    }
+
+    .hero-text {
+        color: #64748b;
+        font-size: 1.1rem;
+        max-width: 90%;
+    }
+
+    .hero-btn {
+        padding: 12px 32px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: fit-content;
+        box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+    }
+
+    .hero-btn:hover {
+        background-color: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(37, 99, 235, 0.3);
+    }
+
+    .hero-image {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        height: 400px;
+    }
+
+    .hero-image:hover {
+        box-shadow: 0 8px 72px var(--primary);
+    }
+
+    .hero-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .hero-image:hover img {
+        transform: scale(1.03);
+    }
+
+    .projects {
+        max-width: 1200px;
+        margin: 8rem auto;
+        padding: 0 2rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 3rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        width: 80px;
+        height: 4px;
+        background: var(--primary);
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .project-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .project-image {
+        height: 220px;
+        overflow: hidden;
+    }
+
+    .project-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .project-card:hover .project-image img {
+        transform: scale(1.05);
+    }
+
+    .project-content {
+        padding: 1.5rem;
+    }
+
+    .project-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .project-tech {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .tech-tag {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .project-desc {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .project-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .project-link:hover {
+        color: var(--secondary);
+    }
+
+    .project-link svg {
+        transition: transform 0.3s ease;
+    }
+
+    .project-link:hover svg {
+        transform: translateX(4px);
+    }
+
+    /* Silme Butonu Stili */
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--danger);
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-delete:hover {
+        background-color: #fef2f2;
+        color: #dc2626;
+    }
+
+    footer {
+        background-color: var(--primary);
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 4rem;
+    }
+
+    .footer-text {
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+    /* Mobile Responsive */
+    @@media (max-width: 768px) {
+        .hero {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .hero-text {
+            max-width: 100%;
+        }
+
+        .hero-image {
+            height: 300px;
+        }
+
+        .nav-links {
+            display: none;
+        }
+    }
+</style>

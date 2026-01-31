@@ -1,0 +1,154 @@
+﻿@model myBlog.Models.About
+
+@{
+    ViewBag.Title = "Hakkımda Düzenle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="margin-top: 30px; margin-bottom: 30px;">
+
+    <h2 class="text-center" style="margin-bottom: 30px;">Hakkımda Bilgilerini Düzenle</h2>
+
+    @using (Html.BeginForm("EditAbout", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FullName, "Ad Soyad", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.FullName, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShortDescription, "Kısa Açıklama", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.ShortDescription, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LongDescription, "Uzun Açıklama", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.LongDescription, new { @class = "form-control", rows = 6 })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Profil Resmi</label>
+                <div class="col-md-10">
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" style="padding: 10px;" />
+
+                    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                    {
+                        <div style="margin-top: 15px;">
+                            <span style="font-size: 0.9rem; color: #666;">Şu anki resim:</span><br />
+                            <img src="@Model.ProfileImageUrl" width="120" style="border-radius: 8px; margin-top: 5px; border: 1px solid #ddd; padding: 3px;" />
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.GithubLink, "GitHub Linki", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.GithubLink, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LinkedInLink, "LinkedIn Linki", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.LinkedInLink, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Bilgileri Kaydet" class="btn btn-primary btn-block" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    body {
+        background-color: #f7f9fc;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h2 {
+        color: #333;
+        font-weight: 600;
+    }
+
+    .form-horizontal {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        max-width: 800px;
+        margin: auto;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .control-label {
+        font-weight: 600;
+        color: #444;
+        padding-top: 7px;
+        width: 100%;
+        max-width: 20%;
+    }
+
+    .col-md-10 {
+        width: 100%;
+        max-width: 80%;
+        flex: 1;
+    }
+
+    .btn-primary {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: 8px;
+        transition: background 0.3s;
+        width: 100%; /* Mobilde tam genişlik */
+    }
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
+    }
+
+    input[type="text"],
+    textarea,
+    input[type="file"] {
+        border-radius: 6px !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        width: 100%;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+        border-color: #2563eb !important;
+    }
+
+    /* Mobil uyumluluk için */
+    @@media (max-width: 768px) {
+        .control-label { max-width: 100%; margin-bottom: 5px; }
+        .col-md-10 { max-width: 100%; }
+        .form-horizontal { padding: 20px; }
+    }
+</style>

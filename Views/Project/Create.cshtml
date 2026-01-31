@@ -1,0 +1,200 @@
+﻿@model myBlog.Models.Projects
+
+@{
+    ViewBag.Title = "Yeni Proje Ekle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="create-wrapper">
+
+    <div class="create-card">
+        <div class="card-header">
+            <h2 class="form-title">✨ Yeni Proje Oluştur</h2>
+            <p class="form-subtitle">Portfolyona yeni bir eser eklemek üzeresin.</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label>Proje Başlığı</label>
+                    <input type="text" name="Title" class="form-control" required placeholder="Örn: Market Otomasyonu v2" />
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Kısa Açıklama <span class="badge">Kartta Görünür</span></label>
+                    <textarea name="Description" class="form-control" rows="2" required placeholder="Projenin vitrin yazısını buraya yaz..."></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Detaylı İçerik</label>
+                    <textarea name="Content" class="form-control" rows="6" placeholder="Projenin hikayesi, amacı ve detayları..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Kullanılan Teknolojiler</label>
+                    <input type="text" name="Tags" class="form-control" placeholder="C#, SQL, .NET Core" />
+                </div>
+
+                <div class="form-group">
+                    <label>GitHub Linki</label>
+                    <input type="text" name="GithubLink" class="form-control" placeholder="https://github.com/..." />
+                </div>
+
+                <div class="form-group">
+                    <label>Proje Görseli</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" name="imageFile" class="form-control file-input" accept="image/*" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Canlı Demo Yolu</label>
+                    <input type="text" name="DemoLink" class="form-control" placeholder="/Content/WebProjects/QR/index.html" />
+                    <small class="hint">⚠️ Klasör yolunu tam ve doğru girdiğinden emin ol.</small>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-save">
+                💾 Projeyi Kaydet ve Yayınla
+            </button>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="error-box">
+                    ⚠️ @ViewBag.Error
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+<style>
+    /* SAYFA DÜZENİ */
+    .create-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+        background-color: #f8fafc;
+        min-height: 80vh;
+    }
+
+    .create-card {
+        background: white;
+        width: 100%;
+        max-width: 700px;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+        border: 1px solid #e2e8f0;
+    }
+
+    /* BAŞLIKLAR */
+    .card-header { text-align: center; margin-bottom: 30px; }
+
+    .form-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 5px;
+    }
+
+    .form-subtitle { color: #64748b; font-size: 0.95rem; }
+
+    /* FORM IZGARASI */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* İki sütunlu yapı */
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .full-width { grid-column: span 2; } /* Bazı alanlar tam genişlik */
+
+    /* INPUTLAR VE LABEL */
+    .form-group label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #334155;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background-color: #f8fafc;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .form-control:focus {
+        border-color: #2563eb;
+        background-color: white;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-control::placeholder { color: #94a3b8; }
+
+    /* DOSYA YÜKLEME VE DİĞER DETAYLAR */
+    .file-input { padding: 9px; background: white; }
+
+    .badge {
+        background: #e0f2fe; color: #0369a1;
+        font-size: 0.7rem; padding: 2px 8px;
+        border-radius: 10px; margin-left: 5px;
+        vertical-align: middle;
+    }
+
+    .hint {
+        display: block;
+        font-size: 0.8rem;
+        color: #ef4444;
+        margin-top: 5px;
+    }
+
+    /* BUTON */
+    .btn-save {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-save:active { transform: translateY(0); }
+
+    /* HATA KUTUSU */
+    .error-box {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #dc2626;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    /* MOBİL UYUM */
+    @@media (max-width: 600px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .full-width { grid-column: span 1; }
+        .create-card { padding: 25px; }
+    }
+</style>
